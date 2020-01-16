@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using MediaInfoDotNet;
+using System;
 using System.IO;
-using MediaInfoDotNet;
 
 namespace GetMediaDurationsNet
 {
@@ -12,20 +8,31 @@ namespace GetMediaDurationsNet
     {
         public static int GetAllFiles(string inputDirectory, string fileFormat)
         {
-            int overAllDuration = 0;          
-            var files = Directory.GetFiles(inputDirectory, fileFormat, SearchOption.AllDirectories);
-            foreach (string file in files)
+            int overAllDuration = 0;
+            if (Directory.Exists(inputDirectory))
             {
-                
-                MediaInfoDotNet.MediaFile medaFileMetada = new MediaFile(file);
-                overAllDuration += medaFileMetada.General.Duration;
+                var files = Directory.GetFiles(inputDirectory, fileFormat);
+                foreach (string file in files)
+                {
 
+                    MediaInfoDotNet.MediaFile medaFileMetada = new MediaFile(file);
+                    overAllDuration += medaFileMetada.General.Duration;
+
+                }
             }
-
+            else
+            {
+                Console.WriteLine("Directroy does not exist");
+            }
             return overAllDuration;
+        }
+        public static void showHelp()
+        {
+            Console.WriteLine("Any Key to contineue and use q to quit");
         }
         static void Main(string[] args)
         {
+            showHelp();
             string readingLine = Console.ReadLine();
             while (readingLine != "q")
             {
@@ -39,7 +46,7 @@ namespace GetMediaDurationsNet
                     Console.WriteLine("Default Extension : " + extension);
                 }
 
-                var overAllDuration = GetAllFiles(directoryName, "*" + extension);
+                var overAllDuration = GetAllFiles(directoryName + "\\", "*" + extension);
 
 
                 var Days = TimeSpan.FromMilliseconds(overAllDuration).Days;
