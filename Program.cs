@@ -11,7 +11,7 @@ namespace GetMediaDurationsNet
             int overAllDuration = 0;
             if (Directory.Exists(inputDirectory))
             {
-                var files = Directory.GetFiles(inputDirectory, fileFormat);
+                var files = Directory.GetFiles(inputDirectory, fileFormat,SearchOption.AllDirectories);
                 foreach (string file in files)
                 {
 
